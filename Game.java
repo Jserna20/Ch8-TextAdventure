@@ -19,6 +19,12 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private int grape, apple, orange;   //Healing items
+    private int bindingCrystal;         //Battle only item
+    private int nullCrystal;            //Battle only item
+    private int totalItems;
+    private int enemy;
+    private int chest;
         
     /**
      * Create the game and initialise its internal map.
@@ -27,8 +33,16 @@ public class Game
     {
         createRooms();
         parser = new Parser();
+        grape = 0;
+        apple = 0;
+        orange = 0;
+        totalItems = 0;
+        bindingCrystal = 0;
+        nullCrystal = 0;
+        enemy = 4;
+        chest = 10;
     }
-
+   
     /**
      * Create all the rooms and link their exits together.
      */
@@ -38,11 +52,11 @@ public class Game
         Room j1, j2, j3, j4, d1, d2, d3, d4, d5, d6;
       
         // create the rooms
-        snowyForest = new Room("In snowy forest");
-        snowyMountainPeak = new Room("On snowy mountain peak");
-        freezerRoom = new Room("In a freezer");
-        mainRoom = new Room("The main room where I woke up in");
-        frozenLakeside = new Room("By a frozen lake");
+        snowyForest = new Room("in snowy forest");
+        snowyMountainPeak = new Room("on snowy mountain peak");
+        freezerRoom = new Room("in a freezer");
+        mainRoom = new Room("in the main room where you woke up in");
+        frozenLakeside = new Room("by a frozen lake");
         j1 = new Room("jungle 1");
         j2 = new Room("jungle 2");
         j3 = new Room("jungle 3");
@@ -136,7 +150,7 @@ public class Game
     {
         System.out.println();
         System.out.println("You are trapped in a place known as the Nightmare Labyrinth!");
-        System.out.println("You must defeat 6 enemies in order to escape.");
+        System.out.println("You must defeat " + enemy + " enemies in order to escape.");
         System.out.println("You can find treasure chests that may help you.");
         System.out.println("Use the teleporters in order to go from room to room.");
         System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
@@ -167,6 +181,14 @@ public class Game
             case GO:
                 goRoom(command);
                 break;
+                
+            case LOOK:
+                startLook(command);
+                break;
+                
+            case INVENTORY:
+                viewInventory(command);
+                break;
 
             case QUIT:
                 wantToQuit = quit(command);
@@ -184,11 +206,22 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("You still need to defeat X number of enemies");
-        System.out.println("around at the university.");
-        System.out.println();
+        System.out.println("You still need to defeat " + enemy + " enemies\n");
         System.out.println("Your command words are:");
         parser.showCommands();
+        System.out.println("go is use to move from room to room. EX: go east.");
+        System.out.println("look is used to get a description of the room.");
+        System.out.println("inventory is used to check your items.");
+        System.out.println("examine gives you a description of the item.");
+        System.out.println("use lets you use the item.");
+        System.out.println("The following are battle only commands:");
+        System.out.println("defend: lets you take normal damage from all types of attacks.");
+        System.out.println("dodge: lets you be immune to strike attacks, but you take double damage from beam attacks.");
+        System.out.println("deflect: lets you be immune to beam attacks, but you take double damage from strike attacks.");
+        System.out.println("strike: lets you perform a strong strike attack.");
+        System.out.println("beam: lets you perform a beam attack.");
+        System.out.println("attack: you perform a normal attack. It always does damage.");
+        System.out.println("your enemies will also use the same battle tatics as you");
     }
 
     /** 
@@ -215,6 +248,37 @@ public class Game
             currentRoom = nextRoom;
             System.out.println(currentRoom.getLongDescription());
         }
+    }
+    
+    private void startLook(Command command)
+    {
+        System.out.println(currentRoom.getLongDescription());
+    }
+    
+    private void viewInventory(Command command)
+    {
+        if(totalItems == 0)
+        {
+            System.out.println("Inventory is empty");
+        }
+        else
+        {
+            if(grape > 0)
+            System.out.println("Grape x" + grape);
+            if(apple > 0)
+            System.out.println("Apple x" + apple);
+            if(orange > 0)
+            System.out.println("Orange x" + orange);
+            if(bindingCrystal > 0)
+            System.out.println("Binding Crystal x" + bindingCrystal);
+            if(nullCrystal > 0)
+            System.out.println("Null Crystal x" + nullCrystal);
+        }
+    }
+    
+    private void itemExamine(Command command)
+    {
+        
     }
 
     /** 
