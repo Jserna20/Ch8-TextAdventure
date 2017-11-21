@@ -19,12 +19,9 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
-    private int grape, apple, orange;   //Healing items
-    private int bindingCrystal;         //Battle only item
-    private int nullCrystal;            //Battle only item
-    private int totalItems;
-    private int enemy;
-    private int chest;
+    private int airGum;   //Movement Limit
+    private int emergencyAir; //Extra movement
+    private int children;
         
     /**
      * Create the game and initialise its internal map.
@@ -33,14 +30,9 @@ public class Game
     {
         createRooms();
         parser = new Parser();
-        grape = 0;
-        apple = 0;
-        orange = 0;
-        totalItems = 0;
-        bindingCrystal = 0;
-        nullCrystal = 0;
-        enemy = 4;
-        chest = 10;
+        airGum = 1;
+        emergencyAir = 2;
+        children = 3;
     }
    
     /**
@@ -48,81 +40,82 @@ public class Game
      */
     private void createRooms()
     {
-        Room snowyForest, snowyMountainPeak, freezerRoom, mainRoom, frozenLakeside;
-        Room j1, j2, j3, j4, d1, d2, d3, d4, d5, d6;
+        Room silverDeposit1, silverDeposit2, silverDeposit3, MineShaftRoom, silverDeposit4;
+        Room junctionSector1, junctionSector2, junctionSector3, junctionSector4;
+        Room deepMines1, deepMines2, deepMines3, deepMines4, deepMines5, deepMines6;
       
         // create the rooms
-        snowyForest = new Room("in snowy forest");
-        snowyMountainPeak = new Room("on snowy mountain peak");
-        freezerRoom = new Room("in a freezer");
-        mainRoom = new Room("in the main room where you woke up in");
-        frozenLakeside = new Room("by a frozen lake");
-        j1 = new Room("jungle 1");
-        j2 = new Room("jungle 2");
-        j3 = new Room("jungle 3");
-        j4 = new Room("jungle 4");
-        d1 = new Room("desert 1");
-        d2 = new Room("desert 2");
-        d3 = new Room("desert 3");
-        d4 = new Room("desert 4");
-        d5 = new Room("desert 5");
-        d6 = new Room("desert 6");
+        MineShaftRoom = new Room("in the main room where you woke up in");
+        silverDeposit1 = new Room("in snowy forest");
+        silverDeposit2 = new Room("on snowy mountain peak");
+        silverDeposit3 = new Room("in a freezer");
+        silverDeposit4 = new Room("by a frozen lake");
+        junctionSector1 = new Room("jungle 1");
+        junctionSector2 = new Room("jungle 2");
+        junctionSector3 = new Room("jungle 3");
+        junctionSector4 = new Room("jungle 4");
+        deepMines1 = new Room("desert 1");
+        deepMines2 = new Room("desert 2");
+        deepMines3 = new Room("desert 3");
+        deepMines4 = new Room("desert 4");
+        deepMines5 = new Room("desert 5");
+        deepMines6 = new Room("desert 6");
         
         // initialise room exits
-        snowyForest.setExit("east", snowyMountainPeak);
-        snowyForest.setExit("south", mainRoom);
-        snowyForest.setExit("north", freezerRoom);
+        silverDeposit1.setExit("east", silverDeposit2);
+        silverDeposit1.setExit("south", MineShaftRoom);
+        silverDeposit1.setExit("north", silverDeposit3);
 
-        snowyMountainPeak.setExit("west", snowyForest);
-        snowyMountainPeak.setExit("north", frozenLakeside);
+        silverDeposit2.setExit("west", silverDeposit1);
+        silverDeposit2.setExit("north", silverDeposit4);
         
-        freezerRoom.setExit("east", frozenLakeside);
-        freezerRoom.setExit("west", j1);
+        silverDeposit3.setExit("east", silverDeposit4);
+        silverDeposit3.setExit("west", junctionSector1);
         
-        frozenLakeside.setExit("west", freezerRoom);
-        frozenLakeside.setExit("south", snowyMountainPeak);
+        silverDeposit4.setExit("west", silverDeposit3);
+        silverDeposit4.setExit("south", silverDeposit2);
 
-        mainRoom.setExit("east", snowyForest);
-        mainRoom.setExit("west", j4);
-        mainRoom.setExit("south", d2);
+        MineShaftRoom.setExit("east", silverDeposit1);
+        MineShaftRoom.setExit("west", junctionSector4);
+        MineShaftRoom.setExit("south", deepMines2);
 
-        j4.setExit("south", mainRoom);
-        j4.setExit("east", j3);
-        j4.setExit("north", j1);
+        junctionSector4.setExit("south", MineShaftRoom);
+        junctionSector4.setExit("east", junctionSector3);
+        junctionSector4.setExit("north", junctionSector1);
         
-        j3.setExit("east", j4);
-        j3.setExit("north", j2);
+        junctionSector3.setExit("east", junctionSector4);
+        junctionSector3.setExit("north", junctionSector2);
         
-        j2.setExit("east", j1);
-        j2.setExit("south", j3);
+        junctionSector2.setExit("east", junctionSector1);
+        junctionSector2.setExit("south", junctionSector3);
         
-        j1.setExit("west", j2);
-        j1.setExit("east", freezerRoom);
+        junctionSector1.setExit("west", junctionSector2);
+        junctionSector1.setExit("east", silverDeposit3);
         
-        d1.setExit("west", j3);
-        d1.setExit("east", d2);
-        d1.setExit("south", d4);
+        deepMines1.setExit("west", junctionSector3);
+        deepMines1.setExit("east", deepMines2);
+        deepMines1.setExit("south", deepMines4);
         
-        d2.setExit("north", mainRoom);
-        d2.setExit("west", d1);
-        d2.setExit("east", d3);
-        d2.setExit("south", d5);
+        deepMines2.setExit("north", MineShaftRoom);
+        deepMines2.setExit("west", deepMines1);
+        deepMines2.setExit("east", deepMines3);
+        deepMines2.setExit("south", deepMines5);
         
-        d3.setExit("west", d2);
-        d3.setExit("east", snowyMountainPeak);
-        d3.setExit("south", d6);
+        deepMines3.setExit("west", deepMines2);
+        deepMines3.setExit("east", silverDeposit2);
+        deepMines3.setExit("south", deepMines6);
         
-        d4.setExit("north", d1);
-        d4.setExit("east", d5);
+        deepMines4.setExit("north", deepMines1);
+        deepMines4.setExit("east", deepMines5);
         
-        d5.setExit("west", d4);
-        d5.setExit("north", d2);
-        d5.setExit("east", d6);
+        deepMines5.setExit("west", deepMines4);
+        deepMines5.setExit("north", deepMines2);
+        deepMines5.setExit("east", deepMines6);
         
-        d6.setExit("west", d5);
-        d6.setExit("north", d3);
+        deepMines6.setExit("west", deepMines5);
+        deepMines6.setExit("north", deepMines3);
 
-        currentRoom = mainRoom;  // start game snowyForest
+        currentRoom = MineShaftRoom;  // start game silverDeposit1
     }
 
     /**
@@ -134,11 +127,21 @@ public class Game
 
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
-                
+        boolean lost = false;        
         boolean finished = false;
-        while (! finished) {
+        boolean won = false;
+        while (!finished && !lost && !won) {
             Command command = parser.getCommand();
             finished = processCommand(command);
+            lost = isGameOver();
+        }
+        if(isGameOver())
+        {
+            System.out.println("You died. Well....");
+        }
+        if(isGameWon())
+        {
+            System.out.println("Congrats everyone escaped!")
         }
         System.out.println("Thank you for playing.  Good bye.");
     }
@@ -149,13 +152,29 @@ public class Game
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("You are trapped in a place known as the Nightmare Labyrinth!");
-        System.out.println("You must defeat " + enemy + " enemies in order to escape.");
+        System.out.println("You are searching for children trapped inside this mine");
+        System.out.println("You must find all the " + children + " children and escape.");
         System.out.println("You can find treasure chests that may help you.");
-        System.out.println("Use the teleporters in order to go from room to room.");
+        System.out.println("Use the pathways in order to go from room to room.");
         System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println();
         System.out.println(currentRoom.getLongDescription());
+    }
+    
+    private boolean isGameOver()
+    {
+        if(emergencyAir == 0)
+            return true;
+        else
+            return false;
+    }
+    
+    private boolean isGameWon()
+    {
+        if(children == 0)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -185,10 +204,6 @@ public class Game
             case LOOK:
                 startLook(command);
                 break;
-                
-            case INVENTORY:
-                viewInventory(command);
-                break;
 
             case QUIT:
                 wantToQuit = quit(command);
@@ -206,22 +221,12 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("You still need to defeat " + enemy + " enemies\n");
+        System.out.println("You still need to find " + children + " more\n");
         System.out.println("Your command words are:");
         parser.showCommands();
         System.out.println("go is use to move from room to room. EX: go east.");
+        System.out.println("Each time you move to a room you have to use air gum so hurry");
         System.out.println("look is used to get a description of the room.");
-        System.out.println("inventory is used to check your items.");
-        System.out.println("examine gives you a description of the item.");
-        System.out.println("use lets you use the item.");
-        System.out.println("The following are battle only commands:");
-        System.out.println("defend: lets you take normal damage from all types of attacks.");
-        System.out.println("dodge: lets you be immune to strike attacks, but you take double damage from beam attacks.");
-        System.out.println("deflect: lets you be immune to beam attacks, but you take double damage from strike attacks.");
-        System.out.println("strike: lets you perform a strong strike attack.");
-        System.out.println("beam: lets you perform a beam attack.");
-        System.out.println("attack: you perform a normal attack. It always does damage.");
-        System.out.println("your enemies will also use the same battle tatics as you");
     }
 
     /** 
@@ -247,6 +252,16 @@ public class Game
         else {
             currentRoom = nextRoom;
             System.out.println(currentRoom.getLongDescription());
+            if(airGum > 0)
+            {
+                airGum--;
+                System.out.println("Air gum left " + airGum);
+            }
+            if(airGum == 0)
+            {
+                emergencyAir--;
+                System.out.println("No more air gum left\n" + emergencyAir + " minute(s) left until suffocation!");
+            }
         }
     }
     
@@ -255,31 +270,6 @@ public class Game
         System.out.println(currentRoom.getLongDescription());
     }
     
-    private void viewInventory(Command command)
-    {
-        if(totalItems == 0)
-        {
-            System.out.println("Inventory is empty");
-        }
-        else
-        {
-            if(grape > 0)
-            System.out.println("Grape x" + grape);
-            if(apple > 0)
-            System.out.println("Apple x" + apple);
-            if(orange > 0)
-            System.out.println("Orange x" + orange);
-            if(bindingCrystal > 0)
-            System.out.println("Binding Crystal x" + bindingCrystal);
-            if(nullCrystal > 0)
-            System.out.println("Null Crystal x" + nullCrystal);
-        }
-    }
-    
-    private void itemExamine(Command command)
-    {
-        
-    }
 
     /** 
      * "Quit" was entered. Check the rest of the command to see
